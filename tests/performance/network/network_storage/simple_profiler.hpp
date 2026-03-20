@@ -63,8 +63,7 @@ namespace hpx { namespace util {
                 this->_parent->addProfile(
                     this->_title, std::make_tuple(elapsed, 0, 1));
                 std::for_each(this->_profiles.begin(), this->_profiles.end(),
-                    [HPX_CXX20_CAPTURE_THIS(=)](
-                        std::map<char const*, valtype>::value_type& p) {
+                    [=, this](std::map<char const*, valtype>::value_type& p) {
                         this->_parent->addProfile(p.first, p.second);
                     });
             }
@@ -74,7 +73,7 @@ namespace hpx { namespace util {
                 int maxlevel = 0;
                 std::for_each(this->_profiles.begin(), this->_profiles.end(),
                     [&](std::map<char const*, valtype>::value_type& p) {
-                        maxlevel = (std::max) (maxlevel, std::get<1>(p.second));
+                        maxlevel = (std::max)(maxlevel, std::get<1>(p.second));
                     });
                 // prepare format string for output
                 char const* fmt1 = "Profile {:20} : {:2} {:5} {:9.3} {} {:7.3}";
@@ -88,7 +87,7 @@ namespace hpx { namespace util {
                 if (_output)
                     hpx::cout << std::string(58 + maxlevel * 9, '-') << "\n";
                 for (auto p = this->_profiles.begin();
-                    p != this->_profiles.end();)
+                     p != this->_profiles.end();)
                 {
                     int& level = std::get<1>(p->second);
                     level_totals[level] += std::get<0>(p->second);

@@ -101,7 +101,7 @@ namespace hpx {
             server::partitioned_vector_config_data>::get_action;
 
         return async(act(), id).then(
-            [HPX_CXX20_CAPTURE_THIS(=)](
+            [=, this](
                 future<server::partitioned_vector_config_data>&& f) -> void {
                 return get_data_helper(id, f.get());
             });
@@ -117,8 +117,7 @@ namespace hpx {
     {
         this->base_type::connect_to(HPX_MOVE(symbolic_name));
         return this->base_type::share().then(
-            [HPX_CXX20_CAPTURE_THIS(=)](
-                shared_future<id_type>&& f) -> hpx::future<void> {
+            [=, this](shared_future<id_type>&& f) -> hpx::future<void> {
                 return connect_to_helper(f.get());
             });
     }
@@ -166,10 +165,10 @@ namespace hpx {
     HPX_PARTITIONED_VECTOR_SPECIALIZATION_EXPORT
     partitioned_vector<T, Data>::partitioned_vector(future<id_type>&& f)
     {
-        f.share().then([HPX_CXX20_CAPTURE_THIS(=)](
-                           shared_future<id_type>&& fut) -> hpx::future<void> {
-            return connect_to_helper(fut.get());
-        });
+        f.share().then(
+            [=, this](shared_future<id_type>&& fut) -> hpx::future<void> {
+                return connect_to_helper(fut.get());
+            });
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -372,7 +371,7 @@ namespace hpx {
             for (hpx::id_type const& id : r.second)
             {
                 std::size_t size =
-                    (std::min) (part_sizes[l], size_ - allocated_size);
+                    (std::min)(part_sizes[l], size_ - allocated_size);
                 partitions_[l] =
                     partition_data(id, allocated_size, size, locality);
 
