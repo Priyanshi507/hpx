@@ -109,6 +109,14 @@ action type. Here is an example demonstrating this::
     // the function 'app::some_global_function'.
     HPX_PLAIN_ACTION(app::some_global_function, some_global_action);
 
+.. note::
+
+   When built with C++26 reflection support (``HPX_HAVE_CXX26_REFLECTION``),
+   the macro :c:macro:`HPX_PLAIN_ACTION` uses ``reflect_action<^^func>``
+   internally, eliminating the need for :c:macro:`HPX_REGISTER_ACTION`.
+   The user-facing syntax remains unchanged.
+
+
 .. important::
 
    The macro :c:macro:`HPX_PLAIN_ACTION` has to be placed in
